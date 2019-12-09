@@ -60,8 +60,8 @@ public:
 	}
 };
 
-Vector Eye(0, 30, -10);
-Vector At(0, 0, -30);
+Vector Eye(0, 10, 20);
+Vector At(0, 0, -5);
 Vector Up(0, 1, 0);
 
 int cameraZoom = 0;
@@ -69,6 +69,7 @@ int cameraZoom = 0;
 // Model Variables
 Model_3DS model_house;
 Model_3DS model_tree;
+Model_3DS model_rock;
 
 // Textures
 GLTexture tex_ground;
@@ -147,6 +148,86 @@ void drawWalls()
 	glVertex3f(-20, 2, 20);
 	glTexCoord2f(0, 2);
 	glVertex3f(-20, 0, 20);
+	glEnd();
+	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);
+
+
+
+	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
+}
+void drawWalls2()
+{
+	glDisable(GL_LIGHTING);	// Disable lighting 
+
+	glColor3f(0.6, 0.6, 0.6);	// Dim the ground texture a bit
+
+	glEnable(GL_TEXTURE_2D);	// Enable 2D texturing
+	//glBindTexture(GL_TEXTURE_2D, wall_texture.texture[0]);	// Bind the ground texture
+
+	glPushMatrix();
+
+	glBegin(GL_QUADS);
+	glNormal3f(0, 1, 0);	// Set quad normal direction.
+	glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) -> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
+	glVertex3f(-20, 0, -25);
+	glTexCoord2f(40, 0);
+	glVertex3f(-20, 2, -25);
+	glTexCoord2f(40, 2);
+	glVertex3f(-20, 2, -65);
+	glTexCoord2f(0, 40);
+	glVertex3f(-20, 0, -65);
+	glEnd();
+	glPopMatrix();
+	//glDisable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
+
+
+	glPushMatrix();
+	glBegin(GL_QUADS);
+	glNormal3f(0, 1, 0);	// Set quad normal direction.
+	glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) +-> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
+	glVertex3f(-20, 0, -25);
+	glTexCoord2f(40, 0);
+	glVertex3f(20, 0, -25);
+	glTexCoord2f(40, 2);
+	glVertex3f(20, 2, -25);
+	glTexCoord2f(0, 40);
+	glVertex3f(-20, 2, -25);
+	glEnd();
+	glPopMatrix();
+	//glDisable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);
+
+
+	glPushMatrix();
+	glBegin(GL_QUADS);
+	glNormal3f(0, 1, 0);	// Set quad normal direction.
+	glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) -> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
+	glVertex3f(20, 0, -25);
+	glTexCoord2f(40, 0);
+	glVertex3f(20, 2, -25);
+	glTexCoord2f(40, 2);
+	glVertex3f(20, 2, -65);
+	glTexCoord2f(0, 0.1);
+	glVertex3f(20, 0, -65);
+	glEnd();
+	glPopMatrix();
+	//glDisable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);
+
+	glPushMatrix();
+	glBegin(GL_QUADS);
+	glNormal3f(0, 1, 0);	// Set quad normal direction.
+	glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) -> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
+	glVertex3f(20, 0, -65);
+	glTexCoord2f(40, 0);
+	glVertex3f(20, 2, -65);
+	glTexCoord2f(40, 2);
+	glVertex3f(-20, 2, -65);
+	glTexCoord2f(0, 2);
+	glVertex3f(-20, 0, -65);
 	glEnd();
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
@@ -322,9 +403,9 @@ void RenderGround2()
 	glTexCoord2f(5, 0);
 	glVertex3f(20, 0, -25);
 	glTexCoord2f(5, 5);
-	glVertex3f(20, 0, -45);
+	glVertex3f(20, 0, -65);
 	glTexCoord2f(0, 5);
-	glVertex3f(-20, 0, -45);
+	glVertex3f(-20, 0, -65);
 	glEnd();
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
@@ -339,11 +420,11 @@ void drawobstacle() {
 	glutSolidCube(1.0);
 	glPopMatrix();
 
-	glPushMatrix();
+	/*glPushMatrix();
 	glTranslatef(0, 1, -16.0);
 	glScalef(1, 2, 8);
 	glutSolidCube(1.0);
-	glPopMatrix();
+	glPopMatrix();*/
 
 	glPushMatrix();
 	glTranslatef(-16.0, 1, 0.0);
@@ -410,6 +491,12 @@ void myDisplay(void)
 	hud(15, 10, 10, "Carol is cute");
 	// Draw Wall
 	drawWalls();
+	drawWalls2();
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, -45);
+	glScalef(0.5, 0.5, 0.5);
+	model_rock.Draw();
+	glPopMatrix();
 
 	// Draw Ground
 	RenderGround();
@@ -548,6 +635,9 @@ void LoadAssets()
 	// Loading Model files
 	model_house.Load("Models/house/house.3DS");
 	model_tree.Load("Models/tree/Tree1.3ds");
+	model_rock.Load("Models/Rock/rock.3DS");
+
+
 
 	// Loading texture files
 	tex_ground.Load("Textures/ground.bmp");

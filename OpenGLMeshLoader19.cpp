@@ -8,6 +8,10 @@
 #include <iostream>
 #include <cstdlib>
 
+bool direction = 0;
+int animationObstacle1 = -29.1;
+int animationObstacle2 =-61.0;
+
 
 
 int WIDTH = 1280;
@@ -60,8 +64,8 @@ public:
 	}
 };
 
-Vector Eye(0, 10, 20);
-Vector At(0, 0, -5);
+Vector Eye(0, 30, -10);
+Vector At(0, 0, -25);
 Vector Up(0, 1, 0);
 
 int cameraZoom = 0;
@@ -85,9 +89,8 @@ void drawWalls()
 
 	glEnable(GL_TEXTURE_2D);	// Enable 2D texturing
 	//glBindTexture(GL_TEXTURE_2D, wall_texture.texture[0]);	// Bind the ground texture
-
+	//left
 	glPushMatrix();
-
 	glBegin(GL_QUADS);
 	glNormal3f(0, 1, 0);	// Set quad normal direction.
 	glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) -> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
@@ -103,22 +106,37 @@ void drawWalls()
 	//glDisable(GL_TEXTURE_2D);
 	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
 
-
+	//top left
 	glPushMatrix();
 	glBegin(GL_QUADS);
 	glNormal3f(0, 1, 0);	// Set quad normal direction.
 	glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) +-> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
 	glVertex3f(-20, 0, -20);
 	glTexCoord2f(40, 0);
-	glVertex3f(20, 0, -20);
+	glVertex3f(-2, 0, -20);
 	glTexCoord2f(40, 2);
-	glVertex3f(20, 2, -20);
+	glVertex3f(-2, 2, -20);
 	glTexCoord2f(0, 40);
 	glVertex3f(-20, 2, -20);
 	glEnd();
 	glPopMatrix();
 	//glDisable(GL_TEXTURE_2D);
 	glEnable(GL_LIGHTING);
+
+	//top right
+	glPushMatrix();
+	glBegin(GL_QUADS);
+	glNormal3f(0, 1, 0);	// Set quad normal direction.
+	glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) +-> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
+	glVertex3f(20, 0, -20);
+	glTexCoord2f(40, 0);
+	glVertex3f(2, 0, -20);
+	glTexCoord2f(40, 2);
+	glVertex3f(2, 2, -20);
+	glTexCoord2f(0, 40);
+	glVertex3f(20, 2, -20);
+	glEnd();
+	glPopMatrix();
 
 
 	glPushMatrix();
@@ -165,9 +183,8 @@ void drawWalls2()
 
 	glEnable(GL_TEXTURE_2D);	// Enable 2D texturing
 	//glBindTexture(GL_TEXTURE_2D, wall_texture.texture[0]);	// Bind the ground texture
-
+	//left
 	glPushMatrix();
-
 	glBegin(GL_QUADS);
 	glNormal3f(0, 1, 0);	// Set quad normal direction.
 	glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) -> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
@@ -183,22 +200,37 @@ void drawWalls2()
 	//glDisable(GL_TEXTURE_2D);
 	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
 
-
+	//button left
 	glPushMatrix();
 	glBegin(GL_QUADS);
 	glNormal3f(0, 1, 0);	// Set quad normal direction.
 	glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) +-> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
 	glVertex3f(-20, 0, -25);
 	glTexCoord2f(40, 0);
-	glVertex3f(20, 0, -25);
+	glVertex3f(-2, 0, -25);
 	glTexCoord2f(40, 2);
-	glVertex3f(20, 2, -25);
+	glVertex3f(-2, 2, -25);
 	glTexCoord2f(0, 40);
 	glVertex3f(-20, 2, -25);
 	glEnd();
 	glPopMatrix();
 	//glDisable(GL_TEXTURE_2D);
 	glEnable(GL_LIGHTING);
+
+	//button right
+	glPushMatrix();
+	glBegin(GL_QUADS);
+	glNormal3f(0, 1, 0);	// Set quad normal direction.
+	glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) +-> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
+	glVertex3f(20, 0, -25);
+	glTexCoord2f(40, 0);
+	glVertex3f(2, 0, -25);
+	glTexCoord2f(40, 2);
+	glVertex3f(2, 2, -25);
+	glTexCoord2f(0, 40);
+	glVertex3f(20, 2, -25);
+	glEnd();
+	glPopMatrix();
 
 
 	glPushMatrix();
@@ -441,32 +473,62 @@ void drawobstacle() {
 }
 
 
+void drawbridge() {
+	glPushMatrix();
+	glBegin(GL_QUADS);
+	glNormal3f(0, 1, 0);	// Set quad normal direction.
+	glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) -> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
+	glVertex3f(-2, 0, -25);
+	glTexCoord2f(40, 0);
+	glVertex3f(-2, 0, -20);
+	glTexCoord2f(40, 2);
+	glVertex3f(2, 0, -20);
+	glTexCoord2f(0, 40);
+	glVertex3f(2, 0, -25);
+	glEnd();
+	glPopMatrix();
 
+}
 ////////////////////////////////////////////////////////////////////////////
-void drawobstacle2() {
+void drawobstacle2(int x,int y) {
 	glPushMatrix();
-	glTranslatef(16.0, 1, 0.0);
-	glScalef(8, 2, 1);
-	glutSolidCube(1.0);
+	glTranslatef(0.0, 0.0, -45);
+	glScalef(0.5, 0.5, 0.5);
+	model_rock.Draw();
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(0, 1, -16.0);
+	glTranslatef(10.0, 0.0, -45);
+	glScalef(0.5, 0.5, 0.5);
+	model_rock.Draw();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-10.0, 0.0, -45);
+	glScalef(0.5, 0.5, 0.5);
+	model_rock.Draw();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, -55);
+	glScalef(0.5, 0.5, 0.5);
+	model_rock.Draw();
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glTranslatef(5.0, 1, y);
 	glScalef(1, 2, 8);
 	glutSolidCube(1.0);
 	glPopMatrix();
 
-	glPushMatrix();
-	glTranslatef(-16.0, 1, 0.0);
-	glScalef(8, 2, 1);
-	glutSolidCube(1.0);
-	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(0, 1, 16.0);
+	glTranslatef(-5.0, 1, x);
 	glScalef(1, 2, 8);
 	glutSolidCube(1.0);
 	glPopMatrix();
+
 
 }
 
@@ -492,11 +554,23 @@ void myDisplay(void)
 	// Draw Wall
 	drawWalls();
 	drawWalls2();
-	glPushMatrix();
-	glTranslatef(0.0, 0.0, -45);
-	glScalef(0.5, 0.5, 0.5);
-	model_rock.Draw();
-	glPopMatrix();
+	 //animation of the obstacles
+	if (animationObstacle2 >= -29.0 || animationObstacle2 <= -61.1) {
+		direction = !direction;
+	}
+	if (direction) {
+		//animationObstacle1++;
+	}
+	else {
+		//animationObstacle1--;
+	}
+
+	if (direction) {
+		//animationObstacle2--;
+	}
+	else {
+		//animationObstacle2++;
+	}
 
 	// Draw Ground
 	RenderGround();
@@ -505,9 +579,13 @@ void myDisplay(void)
 	//Draw Apples
 	randomizedApple();
 
+	//Draw Bridge
+	drawbridge();
+
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	//DrawObstacle
 	drawobstacle();
+	drawobstacle2(animationObstacle1,animationObstacle2);
 
 	// Draw sample character(Box)
 	glPushMatrix();
